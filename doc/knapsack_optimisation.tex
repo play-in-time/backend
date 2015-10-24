@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, enumerate}
+\title{\textbf{A Knapsack Problem: Fitting a Subset of Song Tracks for a Given Time Interval}}
+\author{Arun Drelich, Chris Hinstorff, Sam Slate and Josh White}
+\date{24. October 2015}
+\begin{document}
+
+\maketitle
+
+\section*{Problem Statement}
+
+We define our problem as a subset of the Knapsack Problem. Given a set of $n$ songs $S = \left\{ {s_0, s_1, \ldots, s_n} \right\}$, how can we generate a subset $R \subseteq S$ such that the duration of $R$, defined as $||R_{L}||_{1}$, is constrained by a given duration $C$? We include the additional optimisation constraint requiring that expression $\Delta t = |C - {||L||}_{1}|$ be minimised.
+
+\section*{Notation and Formal Definition}
+
+Define $S$ as the set of songs, then $n = |S|$. Define additionally vectors $\mathbf{l}$ and $\mathbf{w}$, representing the length (duration) of each song and the weight attributed to each song, respectively. Lastly, define $C$ as the maximum-allowed duration of time for songs to play within. Note that $||\mathbf{x}||_{1}$ represents the L1-Norm of a vector $\mathbf{x}$. Throughout this document, convention will be to \textbf{bold} vectors, use capital Roman letters for matrices, and use regular typeface for scalar values. \\
+We wish to find a result set $R \subseteq S$ such that the following hold:
+\begin{gather}
+  \max_{\mathbf{w}} {||R_{w}||_{1}} \\
+  ||R_{l}||_{1} \leq C \\
+  \min_{\mathbf{l}} {\Delta t}
+\end{gather}
+Where $R_{w}$ and $R_{l}$ are defined as the weights and lengths of the songs in $R$, in respective ordering. \\
+Thus, this problem is one of optimisation. We disregard a brute-force solution with runtime $O(2^n)$ and instead opt for a dynamic programming solution with runtime $O(nC)$.
+
+\section*{DP-Solution to the Knapsack Problem}
+
+Let the $(n+1) \times (C+1)$ matrix $B$ store the partial solutions to the problem. Then $B$ is recursively defined as follows:
+\[
+  B(k, l) = \begin{cases}
+            B(k-1, l) &: \mathbf{l}_{k} > l \\
+            \max \left\{{B(k-1,l), B(k-1, l - \mathbf{l}_{k}) + \mathbf{w}_{k}}\right\} &: \text{else}
+            \end{cases}
+\]
+For $k \in [1,n] \subseteq \mathbb{Z}^{+}$ and $l \in [0,C] \subseteq \mathbb{Z}^{+}$.
+
+\section*{Minimising $\Delta t$}
+
+To minimise $\Delta t$, we must define a linear function $\mathbf{w}_{i}(\mathbf{l}_{i}) = k\mathbf{l}_{i}$. Fortunately, since all that matters is relative proportionality, we can use $k = 1$ and so $\mathbf{w} = \mathbf{l}$.
+
+\section*{A Python Implementation}
+
+An implementation in Python is used by our inTime API Server in order to compute a set of song tracks that can be played back to fill up a given time interval.
+
+\end{document}
