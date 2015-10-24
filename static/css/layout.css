@@ -1,0 +1,58 @@
+/* Layout page styling */
+
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.banner .container {
+  max-width: 100%;
+}
+
+.banner {
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #333;
+  color: #fff;
+}
+
+.banner p {
+  color: #aaa
+}
+
+.banner a {
+  color: #fff;
+}
+
+.centered {
+  width: 600px;
+  padding-left: auto;
+  padding-right: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Input element styling */
+
+input[type=text] {
+  text-align: right;
+}
+
+input[type=radio] {
+  margin: 10px;
+}
+input[type=radio] + label {
+  display: inline-block;
+  width: 200px;
+  margin: -2px;
+  padding: 4px 12px;
+  background-color: #A5B9C0;
+  border-color: #ddd;
+}
+
+input[type=radio]:checked + label { 
+  background-image: none;
+  background-color: #6B8791;
+}
