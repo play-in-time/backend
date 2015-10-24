@@ -14,6 +14,10 @@ def tracks_for_duration():
 def update_tracklist():
 	pass
 
+@app.route('just_play')
+def just_play():
+	pass
+
 
 
 if __name__ == '__main__':
