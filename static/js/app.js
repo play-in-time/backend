@@ -40,8 +40,17 @@ $("#playbutton").click(function() {
     var mode = $("#selectmode")[0].value;
     var playlist = $("#selectPlaylist")[0].value;
 
+    results = $("#results");
+    loading = $("#loading");
+    loading.hide();
     $("#total").remove();
     $("li").remove();
+    if (inputBoxValue == "") {
+      results.append("<p style=\"color:red\" class=\"err\">Please specify a time!</p>");
+      results.show();
+      return;
+    }
+    
     var duration = 0;
     var id = '0';
     if (mode == "for") {
@@ -50,17 +59,20 @@ $("#playbutton").click(function() {
 
       
     } else {
-
+      results.append("<p style=\"color:red\" class=\"err\">This mode isn't supported yet, sorry!</p>");
+      results.show();
+      return;
     }
+    
+    results.hide();
+    $(".err").remove();
 
     var playMode = $("input[name=playmode]:checked").val();
-    console.log(playMode);
-
-    $("#loading").show();
+    loading.show();
     if (playMode == "playlist") {
       var params = {'playlist_id': id, 'duration': duration};
       $.get("http://api.playinti.me/tracks_for_duration", params, function(res) {
-          $("#loading").hide();
+          loading.hide();
           response = res.tracklist;
 
           var totalTime = 0;
@@ -75,14 +87,14 @@ $("#playbutton").click(function() {
             resultList.append(tag); 
           }
 
-          $("#results").append("<p id=\"total\">Total time: "+totalTime.toFixed(2)+" min</p>");
+          results.append("<p id=\"total\">Total time: "+totalTime.toFixed(2)+" min</p>");
 
           console.log(res);
       });
     } else {
       var params = {'duration': duration};
       $.get("http://api.playinti.me/just_play", params, function(res) {
-          $("#loading").hide();
+          loading.hide();
           response = res.tracklist;
 
           var totalTime = 0;
@@ -97,7 +109,7 @@ $("#playbutton").click(function() {
             resultList.append(tag); 
           }
 
-          $("#results").append("<p id=\"total\">Total time: "+totalTime.toFixed(2)+" min</p>");
+          results.append("<p id=\"total\">Total time: "+totalTime.toFixed(2)+" min</p>");
 
           console.log(res);
       });
