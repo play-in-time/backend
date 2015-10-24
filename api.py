@@ -2,6 +2,7 @@ from flask import Flask, request, json, jsonify
 from knapsack import knapsack
 import requests
 from base64 import b64encode
+from crossdomain import crossdomain
 
 SPOTIFY_CLIENT_ID = "29a0ec9178864f69b5e5e181811254ed"
 SPOTIFY_CLIENT_SECRET = "fc6b7b56e4154359a1b8569aece1301b"
@@ -100,10 +101,12 @@ def knapsack_from_tracks(tracks, duration):
     return jsonify(tracklist=tracks_to_play)
     
 @app.route('/')
+@crossdomain(origin='*')
 def index():
     return 'This is the api for <a href="http://playinti.me">inTime</a>! Check out our documentation <a href="https://github.com/play-in-time/backend/blob/master/README.md">here</a>.'
 
 @app.route('/tracks_for_duration')
+@crossdomain(origin='*')
 def tracks_for_duration():
     playlist_id = request.args.get('playlist_id')
     duration = request.args.get('duration')
@@ -113,6 +116,7 @@ def tracks_for_duration():
     return knapsack_from_tracks(tracks, duration)
 
 @app.route('/update_tracklist', methods=['POST'])
+@crossdomain(origin='*')
 def update_tracklist():
     post_info = request.get_json(force=True)
 
@@ -129,6 +133,7 @@ def update_tracklist():
 
 
 @app.route('/just_play')
+@crossdomain(origin='*')
 def just_play():
     duration = request.args.get('duration')
 
@@ -138,6 +143,7 @@ def just_play():
     return knapsack_from_tracks(tracks, duration)
 
 @app.route('/playlists')
+@crossdomain(origin='*')
 def playlists():
     return jsonify({'playlists': PLAYLISTS})
 
