@@ -22,6 +22,21 @@ PLAYLISTS = [
         'playlist_id': "445ES7sgFV8zJHebmbUW0L",
         'user_id': "spotify",
     },
+    {
+        'playlist_name': "Epic Party",
+        'playlist_id': "5cdgwETxybr7tWcr7RTiCO",
+        'user_id': "spotify",
+    },
+    {
+        'playlist_name': "Afternoon Acoustic",
+        'playlist_id': "16BpjqQV1Ey0HeDueNDSYz",
+        'user_id': "spotify",
+    },
+    {
+        'playlist_name': "Good Vibes",
+        'playlist_id': "3xgbBiNc7mh3erYsCl8Fwg",
+        'user_id': "spotify",
+    },
 ]
 
 app = Flask(__name__)
