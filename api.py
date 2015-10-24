@@ -93,7 +93,7 @@ def tracks_for_duration():
     playlist_id = request.args.get('playlist_id')
     duration = request.args.get('duration')
 
-    tracks = get_tracks_from_playlist_id(playlist_id)
+    tracks = get_tracks(playlist_id)
 
     return knapsack_from_tracks(tracks, duration)
 
@@ -106,9 +106,13 @@ def update_tracklist():
 
     songs_played = post_info['played']
 
-    url_base = "https://api.spotify.com/v1/users/%s/playlists/%s/tracks"
+    #url_base = "https://api.spotify.com/v1/users/%s/playlists/%s/tracks"
 
-    tracks = call_spotify_api_get(url_base % ("spotify", playlist_id)).json()['items']
+    #tracks = call_spotify_api_get(url_base % ("spotify", playlist_id)).json()['items']
+    
+    tracks = get_tracks(playlist_id)
+
+
     tracks_not_used = [item for item in tracks if item not in songs_played]
     
     lengths = [item['tracks_not_used']['duration_ms']/1000 for item in tracks_not_used]
