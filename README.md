@@ -29,6 +29,8 @@ Expects that the client has determined already whether or not it is necessary to
 ## Contributors:
 
 **Backend**: Chris Hinstorff, Arun Drelich, Sam Slate, Josh White
+
 **Frontend and UI**: Tony Nguyen, Deanna Baris, Vincent Tran
+
 **Design**: Lexie Kirsch, Tess Cotter
 
