@@ -122,6 +122,9 @@ def just_play():
         tracks.extend(get_tracks(playlist['playlist_id'], playlist['user_id']))
     return knapsack_from_tracks(tracks, duration)
 
+@app.route('/playlists')
+def playlists():
+    return jsonify({'playlists': PLAYLISTS})
 
 if __name__ == '__main__':
     app.run(debug=True)
