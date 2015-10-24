@@ -56,9 +56,27 @@ def tracks_for_duration():
     return jsonify(tracklist=tracks_to_play)
 
 
-@app.route('/update_tracklist')
+@app.route('/update_tracklist', methods=['POST'])
 def update_tracklist():
-    pass
+    post_info = request.get_json()
+
+    playlist_id = post_info['id']
+    time_left = post_info['duration']
+
+    songs_played = post_info['played']
+
+    url_base = "https://api.spotify.com/v1/users/%s/playlists/%s/tracks"
+
+    tracks = call_spotify_api_get(url_base % ("spotify", playlist_id)).json()['items']
+    tracks_not_used = [item for item in tracks if item not in songs_played]
+    
+    lengths = [item['tracks_not_used']['duration_ms']/1000 for item in tracks_not_used]
+
+    indices_to_play = knapsack(lengths, lengths, len(lengths), int (time_left))
+    tracks_to_play = [tracks[i] for i in indices_to_play]
+
+    return jsonify(tracklist=tracks_to_play)
+
 
 @app.route('/just_play')
 def just_play():
