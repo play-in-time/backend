@@ -1,4 +1,4 @@
-from flask import Flask, request, json
+from flask import Flask, request, json, jsonify
 from knapsack import knapsack
 import requests
 from base64 import b64encode
@@ -27,6 +27,15 @@ def authorize_spotify():
 
     return response.json()['access_token']
 
+def call_spotify_api_get(url, access_token=None):
+    access_token = access_token or authorize_spotify()
+
+    headers = {
+        'Authorization': 'Bearer %s' % access_token,
+    }
+
+    return requests.get(url=url, headers=headers)
+
 @app.route('/')
 def hello_world():
     return 'This is a!'
@@ -38,10 +47,14 @@ def tracks_for_duration():
 
     url_base = "https://api.spotify.com/v1/users/%s/playlists/%s/tracks"
 
-    return authorize_spotify()
+    tracks = call_spotify_api_get(url_base % ("spotify", playlist_id)).json()['items']
+    lengths = [item['track']['duration_ms'] / 1000 for item in tracks]
 
-#    playlist = requests.get(url_base % ("spotify", playlist_id))
-#    return playlist.text
+    indices_to_play = knapsack(lengths, lengths, len(lengths), int(duration))
+    tracks_to_play = [tracks[i] for i in indices_to_play]
+
+    return jsonify(tracklist=tracks_to_play)
+
 
 @app.route('/update_tracklist')
 def update_tracklist():
