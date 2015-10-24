@@ -31,7 +31,14 @@
         <input type="radio" name="playmode" value="playlist">From a playlist: <select id="selectPlaylist"></select> <br />
         <input type="radio" name="playmode" value="justplay">Just play me music from my library!
         <br />
-        <button type="button" onclick="play()">Play!</button>
+        <button type="button" id="playbutton">Play!</button>
+
+        <div id="results">
+          <span id="loading">Loading results, please wait...</span>
+          <h3> Songs to playback: </h3>
+          <ul id="resultslist">
+          </ul>
+        </div>
       </div>
     </div>
 

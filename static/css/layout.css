@@ -34,6 +34,17 @@
   margin-right: auto;
 }
 
+#results {
+  height: 300px;
+  overflow: scroll;
+}    
+
+/* List styling */
+
+ul {
+  list-style-type: none;
+}
+
 /* Input element styling */
 
 input[type=text] {
