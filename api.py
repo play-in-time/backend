@@ -54,7 +54,7 @@ def call_spotify_api_get(url, access_token=None):
 
     return requests.get(url=url, headers=headers)
 
-def get_tracks(playlist_id, user_id):
+def get_tracks(playlist_id, user_id="spotify"):
     url_base = "https://api.spotify.com/v1/users/%s/playlists/%s/tracks"
 
     response = call_spotify_api_get(url_base % (user_id, playlist_id))
@@ -99,28 +99,18 @@ def tracks_for_duration():
 
 @app.route('/update_tracklist', methods=['POST'])
 def update_tracklist():
-    post_info = request.get_json()
+    post_info = request.get_json(force=True)
 
     playlist_id = post_info['id']
     time_left = post_info['duration']
 
     songs_played = post_info['played']
 
-    #url_base = "https://api.spotify.com/v1/users/%s/playlists/%s/tracks"
-
-    #tracks = call_spotify_api_get(url_base % ("spotify", playlist_id)).json()['items']
-    
     tracks = get_tracks(playlist_id)
 
-
     tracks_not_used = [item for item in tracks if item not in songs_played]
-    
-    lengths = [item['tracks_not_used']['duration_ms']/1000 for item in tracks_not_used]
 
-    indices_to_play = knapsack(lengths, lengths, len(lengths), int (time_left))
-    tracks_to_play = [tracks[i] for i in indices_to_play]
-
-    return jsonify(tracklist=tracks_to_play)
+    return knapsack_from_tracks(tracks_not_used, time_left)
 
 
 @app.route('/just_play')
