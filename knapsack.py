@@ -41,26 +41,27 @@ def knapsack(weights, lengths, n, C):
 
   return solution
 
-args = sys.argv
-if len(args) != 2: # need two args
-  print str(len(args)) + " is too few args!"
-  sys.exit()
+if __name__ == "__main__":
+  args = sys.argv
+  if len(args) != 2: # need two args
+    print str(len(args)) + " is too few args!"
+    sys.exit()
 
-C = int(args[1]) # Time interval (in seconds)
+  C = int(args[1]) # Time interval (in seconds)
 
-songs = ["Something", "something else", "etc"] # example songs list
-l = [20, 10, 50] # some song lengths (in seconds)
-n = len(songs)
+  songs = ["Something", "something else", "etc"] # example songs list
+  l = [20, 10, 50] # some song lengths (in seconds)
+  n = len(songs)
 
-result = []
-if sum(l) <= C: # If all the songs will fit in the interval
-  result = songs # Best-case: O(n)
-else:
-  # Worst- and average-case: O(n*C + n) = O(C(1+n)) = O(nC)
-  solution = knapsack(l, l, n, C) # Returns indices
+  result = []
+  if sum(l) <= C: # If all the songs will fit in the interval
+    result = songs # Best-case: O(n)
+  else:
+    # Worst- and average-case: O(n*C + n) = O(C(1+n)) = O(nC)
+    solution = knapsack(l, l, n, C) # Returns indices
 
-  for index in solution:
-    result.append(songs[index])
+    for index in solution:
+      result.append(songs[index])
 
-print result
+  print result
 
