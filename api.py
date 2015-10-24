@@ -85,8 +85,8 @@ def knapsack_from_tracks(tracks, duration):
     return jsonify(tracklist=tracks_to_play)
     
 @app.route('/')
-def hello_world():
-    return 'This is a!'
+def index():
+    return 'This is the api for <a href="http://playinti.me">inTime</a>! Check out our documentation <a href="https://github.com/play-in-time/backend/blob/master/README.md">here</a>.'
 
 @app.route('/tracks_for_duration')
 def tracks_for_duration():
