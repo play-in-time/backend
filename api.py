@@ -2,6 +2,7 @@ from flask import Flask, request, json, jsonify
 from knapsack import knapsack
 import requests
 from base64 import b64encode
+from crossdomain import crossdomain
 
 SPOTIFY_CLIENT_ID = "29a0ec9178864f69b5e5e181811254ed"
 SPOTIFY_CLIENT_SECRET = "fc6b7b56e4154359a1b8569aece1301b"
@@ -20,6 +21,21 @@ PLAYLISTS = [
     {
         'playlist_name': "Teen Pop!",
         'playlist_id': "445ES7sgFV8zJHebmbUW0L",
+        'user_id': "spotify",
+    },
+    {
+        'playlist_name': "Epic Party",
+        'playlist_id': "5cdgwETxybr7tWcr7RTiCO",
+        'user_id': "spotify",
+    },
+    {
+        'playlist_name': "Afternoon Acoustic",
+        'playlist_id': "16BpjqQV1Ey0HeDueNDSYz",
+        'user_id': "spotify",
+    },
+    {
+        'playlist_name': "Good Vibes",
+        'playlist_id': "3xgbBiNc7mh3erYsCl8Fwg",
         'user_id': "spotify",
     },
 ]
@@ -54,7 +70,7 @@ def call_spotify_api_get(url, access_token=None):
 
     return requests.get(url=url, headers=headers)
 
-def get_tracks(playlist_id, user_id):
+def get_tracks(playlist_id, user_id="spotify"):
     url_base = "https://api.spotify.com/v1/users/%s/playlists/%s/tracks"
 
     response = call_spotify_api_get(url_base % (user_id, playlist_id))
@@ -85,23 +101,39 @@ def knapsack_from_tracks(tracks, duration):
     return jsonify(tracklist=tracks_to_play)
     
 @app.route('/')
-def hello_world():
-    return 'This is a!'
+@crossdomain(origin='*')
+def index():
+    return 'This is the api for <a href="http://playinti.me">inTime</a>! Check out our documentation <a href="https://github.com/play-in-time/backend/blob/master/README.md">here</a>.'
 
 @app.route('/tracks_for_duration')
+@crossdomain(origin='*')
 def tracks_for_duration():
     playlist_id = request.args.get('playlist_id')
     duration = request.args.get('duration')
 
-    tracks = get_tracks_from_playlist_id(playlist_id)
+    tracks = get_tracks(playlist_id)
 
     return knapsack_from_tracks(tracks, duration)
 
-@app.route('/update_tracklist')
+@app.route('/update_tracklist', methods=['POST'])
+@crossdomain(origin='*')
 def update_tracklist():
-    pass
+    post_info = request.get_json(force=True)
+
+    playlist_id = post_info['id']
+    time_left = post_info['duration']
+
+    songs_played = post_info['played']
+
+    tracks = get_tracks(playlist_id)
+
+    tracks_not_used = [item for item in tracks if item not in songs_played]
+
+    return knapsack_from_tracks(tracks_not_used, time_left)
+
 
 @app.route('/just_play')
+@crossdomain(origin='*')
 def just_play():
     duration = request.args.get('duration')
 
@@ -110,6 +142,10 @@ def just_play():
         tracks.extend(get_tracks(playlist['playlist_id'], playlist['user_id']))
     return knapsack_from_tracks(tracks, duration)
 
+@app.route('/playlists')
+@crossdomain(origin='*')
+def playlists():
+    return jsonify({'playlists': PLAYLISTS})
 
 if __name__ == '__main__':
     app.run(debug=True)
