@@ -16,6 +16,7 @@ function doLogin() {
 function updateInputBox() {
   var dropdownValue = $("#selectmode")[0].value;
   var inputBox = $("#inputbox")[0];
+  inputBox.value = "";
   var units = $("#units");
   
   if (dropdownValue == "for") {
@@ -41,12 +42,23 @@ $("#playbutton").click(function() {
 
     $("#total").remove();
     $("li").remove();
+    var duration = 0;
+    var id = '0';
     if (mode == "for") {
-      var duration = parseInt(inputBoxValue)*60;
-      var id = playlists[playlist];
+      duration = parseInt(inputBoxValue)*60;
+      id = playlists[playlist];
 
+      
+    } else {
+
+    }
+
+    var playMode = $("input[name=playmode]:checked").val();
+    console.log(playMode);
+
+    $("#loading").show();
+    if (playMode == "playlist") {
       var params = {'playlist_id': id, 'duration': duration};
-      $("#loading").show();
       $.get("http://api.playinti.me/tracks_for_duration", params, function(res) {
           $("#loading").hide();
           response = res.tracklist;
@@ -67,12 +79,31 @@ $("#playbutton").click(function() {
 
           console.log(res);
       });
-
-      $("#results").show();
-
     } else {
+      var params = {'duration': duration};
+      $.get("http://api.playinti.me/just_play", params, function(res) {
+          $("#loading").hide();
+          response = res.tracklist;
+
+          var totalTime = 0;
+          for (var i=0; i < response.length; i++) {
+            var track = response[i].track;
+            var name = track.name;
+            var duration = (track.duration_ms / 1000)/60;
+            totalTime += duration;
+
+            resultList = $("#resultslist");
+            tag = "<li>" + name + " (" + duration.toFixed(2) + " min)</li>";
+            resultList.append(tag); 
+          }
+
+          $("#results").append("<p id=\"total\">Total time: "+totalTime.toFixed(2)+" min</p>");
+
+          console.log(res);
+      });
     }
 
+    $("#results").show();
 });
 
 $(document).ready(function() {
