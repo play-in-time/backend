@@ -23,7 +23,7 @@ We wish to find a result set $R \subseteq S$ such that the following hold:
 Where $R_{w}$ and $R_{l}$ are defined as the weights and lengths of the songs in $R$, in respective ordering. \\
 Thus, this problem is one of optimisation. We disregard a brute-force solution with runtime $O(2^n)$ and instead opt for a dynamic programming solution with runtime $O(nC)$.
 
-\section*{DP-Solution to the Knapsack Problem}
+\section*{DP-Solution to the Knapsack Problem\footnote{http://www.es.ele.tue.nl/education/5MC10/Solutions/knapsack.pdf}}
 
 Let the $(n+1) \times (C+1)$ matrix $B$ store the partial solutions to the problem. Then $B$ is recursively defined as follows:
 \[
