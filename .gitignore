@@ -1,5 +1,7 @@
 *.swp
 *.log
 *.aux
+*.pyc
 
 .DS_Store
+keys.json

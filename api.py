@@ -4,6 +4,8 @@ import requests
 from base64 import b64encode
 from crossdomain import crossdomain
 
+import apikeys as keys
+
 PLAYLISTS = [
     {
         'playlist_name': "Feel Good Indie Rock",
@@ -45,11 +47,12 @@ app = Flask(__name__)
     returns: Spotify access token
 """
 def authorize_spotify():
+    apiKeys = keys.keysObject()
     url = "https://accounts.spotify.com/api/token"
     payload = {
         'grant_type': 'client_credentials',
     }
-    client = b64encode(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET)
+    client = b64encode(apiKeys.clientID + ':' + apiKeys.secretID)
     headers = {
         'Authorization': 'Basic %s' % client,
     }
