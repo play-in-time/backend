@@ -103,7 +103,7 @@ def knapsack_from_tracks(tracks, duration):
 @app.route('/')
 @crossdomain(origin='*')
 def index():
-    return 'This is the api for <a href="http://playinti.me">inTime</a>! Check out our documentation <a href="https://github.com/play-in-time/backend/blob/master/README.md">here</a>.'
+    return 'This is the API server for <a href="http://playinti.me">inTime</a>! Check out our documentation <a href="https://github.com/play-in-time/backend/blob/master/README.md">here</a>.'
 
 @app.route('/tracks_for_duration')
 @crossdomain(origin='*')
