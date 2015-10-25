@@ -4,9 +4,6 @@ import requests
 from base64 import b64encode
 from crossdomain import crossdomain
 
-SPOTIFY_CLIENT_ID = "29a0ec9178864f69b5e5e181811254ed"
-SPOTIFY_CLIENT_SECRET = "fc6b7b56e4154359a1b8569aece1301b"
-
 PLAYLISTS = [
     {
         'playlist_name': "Feel Good Indie Rock",
