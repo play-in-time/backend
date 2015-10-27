@@ -3,6 +3,7 @@ from knapsack import knapsack
 import requests
 from base64 import b64encode
 from crossdomain import crossdomain
+from random import shuffle
 
 import apikeys as keys
 
@@ -90,6 +91,7 @@ def get_tracks(playlist_id, user_id="spotify"):
     returns: serialized json of desired tracklist
 """
 def knapsack_from_tracks(tracks, duration):
+    shuffle(tracks)
     lengths = [item['track']['duration_ms'] / 1000 for item in tracks]
 
     indices_to_play = knapsack(lengths, lengths, len(lengths), int(duration))
@@ -98,6 +100,7 @@ def knapsack_from_tracks(tracks, duration):
     play_length = sum(lengths[i] for i in indices_to_play)
     print "target:   %s\nachieved: %s\n" % (duration, play_length)
 
+    shuffle(tracks_to_play)
     return jsonify(tracklist=tracks_to_play)
     
 @app.route('/')
