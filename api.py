@@ -47,6 +47,13 @@ PLAYLISTS = [
 
 app = Flask(__name__)
 
+def find_userID(playlist_id):
+  user_id = "spotify"
+  for playlist in PLAYLISTS: # look up user id
+    if playlist['playlist_id'] == playlist_id:
+      user_id = playlist['user_id']
+
+  return user_id
 
 """ Authorizes session with Spotify
 
@@ -117,9 +124,11 @@ def index():
 @crossdomain(origin='*')
 def tracks_for_duration():
     playlist_id = request.args.get('playlist_id')
+    user_id = find_userID()
+    
     duration = request.args.get('duration')
 
-    tracks = get_tracks(playlist_id)
+    tracks = get_tracks(playlist_id, user_id)
 
     return knapsack_from_tracks(tracks, duration)
 
@@ -129,11 +138,12 @@ def update_tracklist():
     post_info = request.get_json(force=True)
 
     playlist_id = post_info['id']
+    user_id = find_userID()
     time_left = post_info['duration']
 
     songs_played = post_info['played']
 
-    tracks = get_tracks(playlist_id)
+    tracks = get_tracks(playlist_id, user_id)
 
     tracks_not_used = [item for item in tracks if item not in songs_played]
 
