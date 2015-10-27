@@ -1,7 +1,7 @@
 from flask import json
+import os
 
-""" Loads API keys from a JSON-formatted file called 'keys.json'
-    Expects keys.json to reside in the current directory.
+""" Loads API keys from environment variables
 """
 class keysObject:
 
@@ -10,12 +10,8 @@ class keysObject:
     self.secretID = self._getsecretid()
 
   def _getclientid(self):
-    keyfile = open('keys.json', 'r')
-    keys = json.load(keyfile)
-    return keys["clientID"]
+    return os.getenv("SPOTIFY_CLIENT_ID")
 
   def _getsecretid(self):
-    keyfile = open('keys.json', 'r')
-    keys = json.load(keyfile)
-    return keys["clientSecret"]
+    return os.getenv("SPOTIFY_CLIENT_SECRET")
 
