@@ -38,6 +38,11 @@ PLAYLISTS = [
         'playlist_id': "3xgbBiNc7mh3erYsCl8Fwg",
         'user_id': "spotify",
     },
+    {
+        'playlist_name': "Schubert",
+        'playlist_id': "0GaR6RZtSLpnbuLEbHwlwt",
+        'user_id': "1210136629",
+    },
 ]
 
 app = Flask(__name__)
