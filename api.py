@@ -106,11 +106,15 @@ def knapsack_from_tracks(tracks, duration):
     shuffle(tracks)
     lengths = [item['track']['duration_ms'] / 1000 for item in tracks]
 
-    indices_to_play = knapsack(lengths, lengths, len(lengths), int(duration))
-    tracks_to_play = [tracks[i] for i in indices_to_play]
+    tracks_to_play = []
+    if sum(lengths) <= int(duration): # Trivial case
+      tracks_to_play = tracks
+    else:
+      indices_to_play = knapsack(lengths, lengths, len(lengths), int(duration))
+      tracks_to_play = [tracks[i] for i in indices_to_play]
 
-    play_length = sum(lengths[i] for i in indices_to_play)
-    print "target:   %s\nachieved: %s\n" % (duration, play_length)
+      play_length = sum(lengths[i] for i in indices_to_play)
+      print "target:   %s\nachieved: %s\n" % (duration, play_length)
 
     shuffle(tracks_to_play)
     return jsonify(tracklist=tracks_to_play)
@@ -125,8 +129,7 @@ def index():
 def tracks_for_duration():
     playlist_id = request.args.get('playlist_id')
     user_id = find_userID(playlist_id)
-    print user_id
-    
+
     duration = request.args.get('duration')
 
     tracks = get_tracks(playlist_id, user_id)
