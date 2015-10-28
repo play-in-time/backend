@@ -83,7 +83,7 @@ def call_spotify_api_get(url, access_token=None):
 
     return requests.get(url=url, headers=headers)
 
-def get_tracks(playlist_id, user_id="spotify"):
+def get_tracks(playlist_id, user_id):
     url_base = "https://api.spotify.com/v1/users/%s/playlists/%s/tracks"
 
     response = call_spotify_api_get(url_base % (user_id, playlist_id))
@@ -124,7 +124,8 @@ def index():
 @crossdomain(origin='*')
 def tracks_for_duration():
     playlist_id = request.args.get('playlist_id')
-    user_id = find_userID()
+    user_id = find_userID(playlist_id)
+    print user_id
     
     duration = request.args.get('duration')
 
@@ -138,7 +139,7 @@ def update_tracklist():
     post_info = request.get_json(force=True)
 
     playlist_id = post_info['id']
-    user_id = find_userID()
+    user_id = find_userID(playlist_id)
     time_left = post_info['duration']
 
     songs_played = post_info['played']
